@@ -25,7 +25,7 @@ public class BOJ2667 {
         visited = new boolean[N][N];
 
 
-        // maze에 저장
+        // maze에 저장 -> 한 줄이 붙어서 문자열로 나오는 경우일경우. 숫자는 tokenizer
         for (int i = 0; i < N; i++) {
             String line = br.readLine();
             for (int j = 0; j < N; j++) {

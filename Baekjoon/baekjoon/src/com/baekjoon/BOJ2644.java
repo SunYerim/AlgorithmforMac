@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 public class BOJ2644 {
     static boolean[] visited;
     static int n, from, to, m;
-    static int x, y, count;
+    static int x, y;
     static ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -59,8 +59,11 @@ public class BOJ2644 {
         for (int neighbor: graph.get(x)) {
             if (!visited[neighbor]) {
                 int result = dfs(neighbor, y);
+
                 if (result >= 0) {
+
                     return result + 1;
+
                 }
             }
         }

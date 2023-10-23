@@ -31,6 +31,7 @@ public class BOJ17298 {
             stack.push(i);
         }
 
+        // 스택이 비어있지 않으면서 현 원소보다 큰 원소가 없다면
         while (!stack.isEmpty()) {
             answer[stack.pop()] = -1;
         }

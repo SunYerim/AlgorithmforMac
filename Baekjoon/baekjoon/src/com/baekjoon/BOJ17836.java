@@ -7,10 +7,8 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-/* logic
-    1. bfs를 사용하여 해결하는 문제
-    2. 만약 그람을 만나게되면 그람까지 이동거리 + 그람의 좌표와 최종 목적지까지의 x, y 좌표값의 차이만큼 더해서 결과값으로 return해주면 된다.
-    */
+// logic
+// bfs 사용 + 그람의 유무에 따라 로직 판별
 public class BOJ17836 {
     static int N, M, T;
     static boolean[][][] visited;

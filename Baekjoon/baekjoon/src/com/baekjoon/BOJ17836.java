@@ -42,8 +42,6 @@ public class BOJ17836 {
             System.out.println("Fail");
         else
             System.out.println(result);
-
-
     }
 
     public static int bfs(int x, int y) {
@@ -62,7 +60,7 @@ public class BOJ17836 {
             for (int i = 0; i < 4; i++) {
                 int nx = current.x + dx[i];
                 int ny = current.y + dy[i];
-                if (nx >= 0 && nx < M && ny >= 0 && ny < N) {
+                if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
                     // 그람이 없는 경우
                     if (!current.isGram) {
                         if (!visited[nx][ny][0] && maze[nx][ny] == 0){

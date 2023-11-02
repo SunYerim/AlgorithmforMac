@@ -58,5 +58,4 @@ public class BOJ1068 {
         }
         return false;
     }
-
 }

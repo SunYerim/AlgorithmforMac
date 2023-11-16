@@ -29,16 +29,16 @@ public class BOJ7576 {
             }
         }
 
-        int answer = bfs(box, N, M);
+        int answer = bfs(N, M);
 
-        if (checkAllTomatoes(box, N, M)) {
+        if (checkAllTomatoes(N, M)) {
             System.out.println(answer);
         } else {
             System.out.println(-1);
         }
     }
 
-    public static int bfs(int[][] box, int N, int M) {
+    public static int bfs(int N, int M) {
         Queue<Node> q = new LinkedList<>();
         int days = 0;
 
@@ -71,7 +71,7 @@ public class BOJ7576 {
         return days;
     }
 
-        static boolean checkAllTomatoes(int[][] box, int N, int M) {
+        static boolean checkAllTomatoes(int N, int M) {
             // 모든 토마토 익었니 안익었니.
             for (int i = 0; i < N; i++) {
                 for (int j = 0; j < M; j++) {
@@ -93,5 +93,4 @@ public class BOJ7576 {
             this.count = count;
         }
     }
-
 }

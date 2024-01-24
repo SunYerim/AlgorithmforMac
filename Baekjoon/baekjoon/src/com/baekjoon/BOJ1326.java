@@ -32,6 +32,7 @@ public class BOJ1326 {
         B = Integer.parseInt(st.nextToken());
 
         BFS();
+        System.out.println(Arrays.toString(dist));
         System.out.println(dist[B]);
     }
 

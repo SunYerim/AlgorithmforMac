@@ -9,7 +9,7 @@ public class Solution {
     static int[] guCard = new int[9]; // 0
     static int[] inCard = new int[9]; // 0 dummy <= 다양한 순열
     static int[] tgt = new int[9]; // inCard => tgt 순열 완탐 결과 저장
-    static boolean[] select = new boolean[N];
+//    static boolean[] select = new boolean[N];
     static StringBuilder sb = new StringBuilder();
     public static void main(String[] args) throws Exception{
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -19,7 +19,7 @@ public class Solution {
             // 변수 초기화
             win = lose = 0;
             Arrays.fill(input, 0);
-            Arrays.fill(select, false);
+//            Arrays.fill(select, false);
 
             StringTokenizer st = new StringTokenizer(br.readLine());
 
@@ -40,14 +40,14 @@ public class Solution {
                 }
             }
 
-            perm(0);
+            perm(0, 0);
 
             sb.append("#").append(t).append(" ").append(win).append(" ").append(lose).append("\n");
         }
         System.out.println(sb);
     }
 
-    static void perm(int tgtIdx) {
+    static void perm(int tgtIdx, int mask) { // mask는 정수이지만, bit로 표현하면 어느 자리가 선택/비선택 표현
         // 기저 조건
         if (tgtIdx == N) {
             // 순열이 하나 완성
@@ -58,12 +58,12 @@ public class Solution {
         // for문을 이용한 순열 구현
         for (int i = 0; i < N; i++) {
             // 이전에 사용된 카드(i)는 거른다.
-            if (select[i]) continue;
+//            if (select[i]) continue;
+            if ( (mask & 1 << i) != 0 ) continue;
 
             tgt[tgtIdx] = inCard[i];
-            select[i] = true;
-            perm(tgtIdx + 1);
-            select[i] = false;
+            perm(tgtIdx + 1, mask | 1 << i);
+
         }
     }
 

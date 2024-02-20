@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -6,49 +5,51 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
-public class Main {
-    static int N, M;
-    static int[][] maze;
-    static boolean[][][] visited;
+/* logic
+    1. 해당 문제는 벽을 언제 부술 것인지가 문제에서 중요하게 봐야할 점이다.
+    2. visited 배열을 3차원으로 확장 & bfs로 접근
 
+    */
+public class Main {
+    static int n, m;
+    static int[][] map;
+    static boolean[][][] visited;
+    static int[] dx = {1, -1, 0, 0};
+    static int[] dy = {0, 0, -1, 1};
     public static void main(String[] args) throws IOException {
-        // 최단거리 문제 -> bfs
-        // 여기서는 벽을 '언제' 부술 건지가 문제임 -> boolean 배열을 3차원으로 확장
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        M = Integer.parseInt(st.nextToken());
 
-        maze = new int[N][M];
-        visited = new boolean[N][M][2];
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
 
-        for (int i = 0; i < N; i++) {
-            String row = br.readLine();
-            for (int j = 0; j < M; j++) {
-                maze[i][j] = row.charAt(j) - '0';
+        map = new int[n][m];
+        visited = new boolean[n][m][2];
+
+        for (int i = 0; i < n; i++) {
+            String tmp = br.readLine();
+            for (int j = 0; j < m; j++) {
+                map[i][j] = tmp.charAt(j) - '0';
             }
         }
 
         bfs(new Node(0, 0, 0, 0));
     }
 
-    public static void bfs(Node startNode) {
-        Queue<Node> queue = new LinkedList<Node>();
-        queue.add(startNode);
-
-        int[] dx = {1, -1, 0, 0}; // 동서남북
-        int[] dy = {0, 0, -1, 1};
+    static void bfs(Node start) {
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(start);
 
         while (!queue.isEmpty()) {
-            Node current = queue.poll();
-            int x = current.x;
-            int y = current.y;
-            int z = current.z;
-            int distance = current.distance;
+            Node curr = queue.poll();
+            int x = curr.x;
+            int y = curr.y;
+            int wall = curr.wall;
+            int dis = curr.distance;
 
             // 목적지에 도착하면
-            if (x == N - 1 && y == M - 1) {
-                System.out.println(distance+1);
+            if (x == n-1 && y == m-1) {
+                System.out.println(dis + 1);
                 return;
             }
 
@@ -56,31 +57,34 @@ public class Main {
                 int nx = x + dx[i];
                 int ny = y + dy[i];
 
-                //범위 내에 있으면서
-                if (nx >= 0 && nx < N && ny >= 0 && ny < M) {
-                    if (maze[nx][ny] == 0 && !visited[nx][ny][z]) {
-                        visited[nx][ny][z] = true;
-                        queue.add(new Node(nx, ny, z, distance+1));
-                    } else if (z==0 && maze[nx][ny] == 1 && !visited[nx][ny][z]) {
+                // 범위 내에 있으면서
+                if (nx >= 0 && nx < n && ny >= 0 && ny < m) {
+                    // 이동할수 있는 길이면서
+                    if (map[nx][ny] == 0 && !visited[nx][ny][wall]) {
+                        visited[nx][ny][wall] = true;
+                        queue.add(new Node(nx, ny, wall, dis+1));
+                        // 벽이면서
+                    } else if (wall == 0 && map[nx][ny] == 1 && !visited[nx][ny][wall]) {
                         visited[nx][ny][1] = true;
-                        queue.add(new Node(nx, ny, 1, distance + 1));
+                        queue.add(new Node(nx, ny, 1, dis+1));
                     }
                 }
             }
         }
         System.out.println(-1);
+
     }
 
-    static class Node {
-        int x;
-        int y;
-        int z; // 벽 뚫었나 안뚫었나 여부 -> 0이면 안뚫고 1이면 뚫음
-        int distance; //현재까지 이동한 거리
 
-        public Node(int x, int y, int z, int distance) {
+    static class Node {
+        // wall이 0이면 벽을 안 뚫은 것, 1이면 뚫은 것
+        // distance: 현재까지 이동한 거리
+        int x, y, wall, distance;
+
+        public Node (int x, int y, int wall, int distance) {
             this.x = x;
             this.y = y;
-            this.z = z;
+            this.wall = wall;
             this.distance = distance;
         }
     }

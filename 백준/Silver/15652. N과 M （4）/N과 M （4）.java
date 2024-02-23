@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class Main {
+    static int n, m;
+    static boolean[] isSelected;; // 현재 뽑은 수 flag배열
+    static int[] numbers; // 현재까지 뽑은 수를 저장하는 배열
+    static StringBuilder sb = new StringBuilder();
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        n = Integer.parseInt(st.nextToken());
+        m = Integer.parseInt(st.nextToken());
+
+        numbers = new int[m]; // 현재까지 뽑은 수를 저장하는 배열
+//        isSelected = new boolean[n+1];
+
+        permutation(0, 1);
+        System.out.print(sb);
+    }
+
+    private static void permutation(int cnt, int start) {
+        // 기저
+        if (cnt == m){
+            //int tmp = numbers.length;
+            for (int i = 0; i < m; i++) {
+                sb.append(numbers[i]).append(' ');
+            }
+            sb.append('\n');
+            return;
+        }
+
+        // 유도
+        for (int i = start; i <= n; i++) {
+//            if (isSelected[i])
+//                continue;
+            numbers[cnt] = i;
+//            isSelected[cnt] = true;
+            permutation(cnt+1, i);
+//            isSelected[cnt] = false;
+        }
+    }
+}

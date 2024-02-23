@@ -22,7 +22,7 @@ public class Main {
         Arrays.sort(muscles);
 
         // 1 40 41 42 같은 경우 고려해야 함.
-        long res = -1;
+        long res = 0;
         int length = n / 2;
 
         if (n % 2 == 0){

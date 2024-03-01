@@ -3,32 +3,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-/* logic
-    1. 연산자를 하나씩 추가하면서 재귀호출
-    2. 기저조건 -> n-1개를 모두 추가한 후 수식 값 계산
-    3. 최대, 최소 갱신
-    4. 정답 출력*/
 public class Solution {
-    static int n, ans, minN, maxN;
-    static int[] operator, numbers, makeNum;
+    static int T, n, maxNum, minNum;
+    static int[] numbers;
+    static int[] operators;
     static StringBuilder sb = new StringBuilder();
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        T = Integer.parseInt(br.readLine());
         StringTokenizer st;
-        int T = Integer.parseInt(br.readLine());
 
         for (int tc = 1; tc <= T; tc++) {
-            minN = Integer.MAX_VALUE;
-            maxN = Integer.MIN_VALUE;
+            sb.append("#").append(tc).append(" ");
             n = Integer.parseInt(br.readLine());
-
-            operator = new int[4];
+            operators = new int[4];
             numbers = new int[n];
-            makeNum = new int[n-1];
 
             st = new StringTokenizer(br.readLine());
             for (int i = 0; i < 4; i++) {
-                operator[i] = Integer.parseInt(st.nextToken());
+                operators[i] = Integer.parseInt(st.nextToken());
             }
 
             st = new StringTokenizer(br.readLine());
@@ -36,52 +29,45 @@ public class Solution {
                 numbers[i] = Integer.parseInt(st.nextToken());
             }
 
-            check(0); // 로직 실행
+            maxNum = Integer.MIN_VALUE;
+            minNum = Integer.MAX_VALUE;
 
-            ans = maxN - minN;
-            sb.append("#").append(tc).append(" ").append(ans).append('\n');
+            dfs(1, numbers[0], operators[0], operators[1], operators[2], operators[3]);
+
+            sb.append(maxNum - minNum).append("\n");
         }
-        System.out.print(sb);
+        System.out.println(sb);
+
     }
 
-    private static void check(int idx) {
+    private static void dfs(int depth, int total, int add, int sub, int mul, int div) {
         // 기저
-        if (idx == n-1)
-            calcNum();
-        for (int i = 0; i < 4; i++) {
-            // 연산자를 다 사용하면
-            if (operator[i] == 0)
-                continue;
-            operator[i]--;
-            makeNum[idx] = i;
-            check(idx+1);
-            operator[i]++;
+        if (depth == n) {
+            maxNum = Math.max(maxNum, total);
+            minNum = Math.min(minNum, total);
+            return;
         }
-    }
 
-    private static void calcNum() {
-        int num = numbers[0];
-        for (int i = 0; i < n-1; i++) {
-            // +
-            if (makeNum[i] == 0) {
-                num += numbers[i+1];
-            }
-            // -
-            else if (makeNum[i] == 1) {
-                num -= numbers[i+1];
-            }
-            // *
-            else if (makeNum[i] == 2) {
-                num *= numbers[i+1];
-            }
-            // /
-            else if (makeNum[i] == 3) {
-                num /= numbers[i+1];
-            }
+        // 유도
+        // 덧셈
+        if (add > 0) {
+            dfs(depth+1, total+numbers[depth], add-1, sub, mul, div);
         }
-        if (num > maxN)
-            maxN = num;
-        if (num < minN)
-            minN = num;
+
+        // 뺄셈
+        if (sub > 0) {
+            dfs(depth+1, total-numbers[depth], add, sub-1, mul, div);
+        }
+
+        // 곱셈
+        if (mul > 0) {
+            dfs(depth+1, total*numbers[depth], add, sub, mul-1, div);
+        }
+
+        // 나눗셈
+        if (div > 0) {
+            dfs(depth+1, total/numbers[depth], add, sub, mul, div-1);
+        }
+
     }
 }

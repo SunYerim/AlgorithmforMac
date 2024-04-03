@@ -5,9 +5,7 @@ class Solution {
     public int solution(int n, int[][] costs) {
         int answer = 0;
         parents = new int[n];
-        
-        // cost에 따른 가중치 정렬
-        Arrays.sort(costs, (int[] c1, int[] c2) -> c1[2] - c2[2]);
+        islands = new ArrayList<>();
         
         // 초기화
         for (int i = 0; i < parents.length; i++) {
@@ -18,15 +16,21 @@ class Solution {
             int from = costs[i][0];
             int to = costs[i][1];
             int cost = costs[i][2];
+            islands.add(new Node(from, to, cost));
+        }
+        
+        Collections.sort(islands);
+        
+        for (int i = 0; i < islands.size(); i++) {
+            int a = islands.get(i).from;
+            int b = islands.get(i).to;
+            int cost = islands.get(i).cost;
             
-            int fromParent = find(from);
-            int toParent = find(to);
-            
-            // 만약 같으면
-            if (fromParent == toParent) continue;
-            
-            answer += cost;
-            parents[toParent] = fromParent;
+            // 사이클이 발생하지 않는 경우만
+            if (find(a) != find(b)) {
+                union(a, b);
+                answer += cost;
+            }
         }
         return answer;
     }
@@ -40,9 +44,10 @@ class Solution {
         a = find(a);
         b = find(b);
         
-        if (a != b) {
+        if (a < b)
             parents[b] = a;
-        }
+        else
+            parents[a] = b;
     }
     
     

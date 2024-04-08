@@ -39,7 +39,6 @@ public class Main {
             }
             // 사이클이 딱 생겼다면
             else {
-//                System.out.println(count+1);
                 flag = true;
             }
         }
@@ -67,14 +66,6 @@ public class Main {
             parents[b] = a;
         } else {
             parents[a] = b;
-        }
-    }
-
-    static class Node {
-        private int from, to;
-        public Node(int from, int to) {
-            this.from = from;
-            this.to = to;
         }
     }
 }

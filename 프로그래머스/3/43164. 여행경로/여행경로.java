@@ -1,37 +1,36 @@
-// dfs , 순열 문제
 import java.util.*;
+
 class Solution {
-    static boolean[] used;
-    static ArrayList<String> list;
+    static boolean[] ticketUsed;
+    static ArrayList<String> answers;
     static String[] answer;
     public String[] solution(String[][] tickets) {
-        list = new ArrayList<>();
-        used = new boolean[tickets.length];
+        ticketUsed = new boolean[tickets.length]; // 티켓 사용 유무
+        answers = new ArrayList<>();
         
         dfs(0, "ICN", "ICN", tickets);
         
-        Collections.sort(list);
-    
-        // 0번째 인덱스 list
-        answer = list.get(0).split(" ");
+        Collections.sort(answers); // String 객체
         
+        answer = answers.get(0).split(" ");
         
         return answer;
     }
     
-    private static void dfs(int depth, String now, String path, String[][] tickets)     {
-        // 기저 -> ticket을 다 쓴 경우
+    private static void dfs(int depth, String now, String path, String[][] tickets) {
+        // 기저
         if (depth == tickets.length) {
-            list.add(path);
+            answers.add(path); // 정답 배열에 path넣기
             return;
         }
+        
         // 유도
-        for (int i = 0; i < used.length; i++) {
-            // 방문하지 않고, 출발지와 동일
-            if (!used[i] && now.equals(tickets[i][0])) {
-                used[i] = true;
-                dfs(depth+1, tickets[i][1], path + " " + tickets[i][1], tickets);
-                used[i] = false;
+        // 아직 방문 안 했고, 출발지라면
+        for (int i = 0; i < ticketUsed.length; i++) {
+            if (!ticketUsed[i] && now.equals(tickets[i][0])) {
+                ticketUsed[i] = true;
+                dfs(depth + 1, tickets[i][1], path + " " + tickets[i][1], tickets);
+                ticketUsed[i] = false;
             }
         }
     }

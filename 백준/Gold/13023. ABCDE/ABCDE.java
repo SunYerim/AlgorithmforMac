@@ -45,7 +45,6 @@ public class Main {
             friends[i] = new Friend();
             friends[i].relationship = new ArrayList<>();
             friends[i].num = i;
-            friends[i].isVisited = false;
         }
 
         // 친구관계 입력 받기
@@ -59,8 +58,7 @@ public class Main {
 
         // 돌면서 dfs
         for (int i = 0; i < N; i++) {
-            visited = new boolean[N];
-            dfs(i, 0, visited);
+            dfs(i, 0);
             // 이미 충족
             if (result) break;
         }
@@ -69,16 +67,10 @@ public class Main {
 
     }
 
-    private static void dfs(int idx, int depth, boolean[] visited) {
+    private static void dfs(int idx, int depth) {
         // 기저
         if (depth == 4) {
             result = true; // 가능합니다.
-//            // 출력
-//            for (int i = 0; i < N; i++) {
-//                System.out.print(visited[i] ? 1 : 0);
-//
-//            }
-//            System.out.println();
             return;
         }
 
@@ -87,9 +79,7 @@ public class Main {
         friends[idx].isVisited = true;
         for (Integer friend : friends[idx].relationship) {
             if (!friends[friend].isVisited) {
-//                visited[friend] = true;
-                dfs(friend, depth + 1, visited);
-//                visited[friend] = false;
+                dfs(friend, depth + 1);
             }
         }
         friends[idx].isVisited = false;

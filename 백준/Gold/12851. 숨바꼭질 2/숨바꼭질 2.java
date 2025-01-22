@@ -48,7 +48,6 @@ public class Main {
                 else if (time == currTime) {
                     ans++;
                 }
-                continue;
             }
 
             // 유도

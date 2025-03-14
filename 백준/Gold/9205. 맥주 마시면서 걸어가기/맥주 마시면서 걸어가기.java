@@ -2,54 +2,68 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
 
-    static int t, n;
+    static int T, n;
+    static StringBuilder sb = new StringBuilder();
+    static List<Node> nodes;
+    static boolean[] visited;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st;
-        t = Integer.parseInt(br.readLine());
-        for (int i = 0; i < t; i++) {
-            int n = Integer.parseInt(br.readLine());
-            ArrayList<Node> arr = new ArrayList<Node>();
-            int[][] map = new int[n+2][n+2];
-            for (int j = 0; j < n+2; j++) {
+
+        T = Integer.parseInt(br.readLine());
+
+        for (int i = 0; i < T; i++) {
+            n = Integer.parseInt(br.readLine());
+            nodes = new ArrayList<>();
+            for (int j = 0; j < n + 2; j++) {
                 st = new StringTokenizer(br.readLine());
-                arr.add(new Node(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken())));
-            }
-            for (int k = 0; k < n+2; k++) {
-                for (int h = k+1; h < n+2; h++) {
-                    map[k][h] = menhaten(arr.get(k).x, arr.get(k).y, arr.get(h).x, arr.get(h).y);
-                    if (map[k][h] > 1000) {
-                        map[k][h] = -1;
-                        map[h][k] = -1;
-                    }
-                }
-            }
-            for (int k = 0; k < n+2; k++) {
-                for (int h = 0; h < n+2; h++) {
-                    if (k == h) continue;
-                    for (int l = 0; l < n+2; l++) {
-                        if (l == h || l == k) continue;
-                        if (map[h][k] == -1 || map[k][l] == -1) continue;
-                        map[h][l] = 1;
-                    }
-                }
-            }
-            if (map[0][n+1] == -1) {
-                System.out.println("sad");
-            } else {
-                System.out.println("happy");
+                int a = Integer.parseInt(st.nextToken());
+                int b = Integer.parseInt(st.nextToken());
+                nodes.add(new Node(a, b));
             }
 
+            if (bfs()) sb.append("happy").append("\n");
+            else sb.append("sad").append("\n");
         }
-    }
-    private static int menhaten(int x1, int y1, int x2, int y2) {
-        return (Math.abs(x2-x1) + Math.abs(y2-y1));
+
+        System.out.print(sb.toString());
+
     }
 
+    private static boolean bfs() {
+        Queue<Integer> queue = new LinkedList<>();
+        visited = new boolean[n+2];
+        queue.add(0);
+        visited[0] = true;
+
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+            Node curNode = nodes.get(cur);
+
+            // 도착지라면
+            if (cur == n + 1) return true;
+
+            for (int i = 0; i < n + 2; i++) {
+                if (!visited[i] && menhaten(curNode, nodes.get(i))) {
+                    queue.add(i);
+                    visited[i] = true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // menhaten
+    private static boolean menhaten(Node a, Node b) {
+        return (Math.abs(a.x - b.x) + Math.abs(a.y - b.y)) <= 1000;
+    }
 
     static class Node {
         int x, y;
@@ -58,4 +72,5 @@ public class Main {
             this.y = y;
         }
     }
+
 }

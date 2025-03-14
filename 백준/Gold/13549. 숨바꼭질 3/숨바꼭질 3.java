@@ -1,4 +1,3 @@
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -7,46 +6,55 @@ import java.util.Queue;
 import java.util.StringTokenizer;
 
 public class Main {
-    static int N, K;
-    static boolean[] visited = new boolean[100001];
+
+    static int n, k, answer = Integer.MAX_VALUE;
+    static boolean[] visited;
     static int[] dx = {-1, 1};
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
-        N = Integer.parseInt(st.nextToken());
-        K = Integer.parseInt(st.nextToken());
 
-        bfs(N, K);
+        n = Integer.parseInt(st.nextToken());
+        k = Integer.parseInt(st.nextToken());
+        visited = new boolean[100001];
+        
+        bfs();
+
+        System.out.println(answer);
     }
 
-    public static void bfs(int start, int destination) {
-        Queue<int[] > q = new LinkedList<>();
-        q.add(new int[]{start, 0});
-        visited[start] = true;
+    private static void bfs() {
+        // n에서 시작합니다.
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{n, 0}); // 현 위치와 시간
+        visited[n] = true;
 
+        while (!queue.isEmpty()) {
+            int[] cur = queue.poll();
+            int x = cur[0];
+            int time = cur[1];
 
-        while (!q.isEmpty()) {
-            int[] p = q.poll();
-            int pos = p[0];
-            int move = p[1];
-
-            if (pos == destination) {
-                System.out.println(move);
+            // 기저 -> 도착
+            if (x == k) {
+                answer = Math.min(answer, time);
                 return;
             }
-            if (2*pos <= 100000 && !visited[2*pos]) {
-                visited[2*pos] = true;
-                q.add(new int[]{2*pos, move});
+
+            // 순간이동
+            if (2 * x <= 100000 && !visited[2 * x]) {
+                visited[2 * x] = true;
+                queue.add(new int[]{2 * x, time});
             }
 
+            // 그냥 이동
             for (int i = 0; i < 2; i++) {
-                int next = pos + dx[i];
-                if (next >= 0 && next <= 100000 && !visited[next]) {
-                    visited[next] = true;
-                    q.add(new int[]{next, move+1});
+                int nx = x + dx[i];
+                if (nx >= 0 && nx <= 100000 && !visited[nx]) {
+                    visited[nx] = true;
+                    queue.add(new int[]{nx, time + 1});
                 }
             }
-
         }
     }
+
 }

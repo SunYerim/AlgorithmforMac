@@ -4,52 +4,56 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Main {
-    // 내 기준에서 left & right max hegiht값 찾기 -> 여기서 min값 내 높이에서 -
+
     static int H, W;
-    static int[] block;
+    static int[] rains;
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         StringTokenizer st = new StringTokenizer(br.readLine());
 
-        H = Integer.parseInt(st.nextToken());
-        W = Integer.parseInt(st.nextToken());
+        H = Integer.parseInt(st.nextToken()); // 세로
+        W = Integer.parseInt(st.nextToken()); // 가로
 
-        block = new int[W];
+        rains = new int [W];
 
         st = new StringTokenizer(br.readLine());
-
         for (int i = 0; i < W; i++) {
-            block[i] = Integer.parseInt(st.nextToken());
+            rains[i] = Integer.parseInt(st.nextToken());
         }
 
-        int answer = 0;
+        int total = 0;
 
-        // 두번째 블록부터 순회
         for (int i = 1; i < W - 1; i++) {
-            int maxHeight = rain(i);
-            int tmp = maxHeight - block[i];
-            if (tmp > 0) {
-                answer += tmp;
-            }
-        }
-        System.out.println(answer);
+            // 내 기준 좌측 maxHeight
+            int right = findRight(i);
 
+            // 내 기준 우측 maxHeight
+            int left = findLeft(i);
+
+            // 그 중에 min값 - 내 높이를 total에 누적
+            int minHeight = Math.min(right, left);
+            if (minHeight <= rains[i]) continue;
+//            System.out.println(i + " " + (minHeight - rains[i]));
+            total += (minHeight - rains[i]);
+        }
+
+        System.out.println(total);
     }
 
-    private static int rain(int idx) {
-        int leftMax = 0, rightMax = 0;
-
-        // 내 위치에서 left height
-        for (int i = 0; i < idx; i++) {
-            leftMax = Math.max(leftMax, block[i]);
-        }
-
-        // 내 위치에서 right height
+    private static int findRight(int idx) {
+        int ans = Integer.MIN_VALUE;
         for (int i = idx + 1; i < W; i++) {
-            rightMax = Math.max(rightMax, block[i]);
+            ans = Math.max(ans, rains[i]);
         }
 
-        return Math.min(leftMax, rightMax);
+        return ans;
     }
 
+    private static int findLeft(int idx) {
+        int ans = Integer.MIN_VALUE;
+        for (int i = 0; i < idx; i++) {
+            ans = Math.max(ans, rains[i]);
+        }
+        return ans;
+    }
 }

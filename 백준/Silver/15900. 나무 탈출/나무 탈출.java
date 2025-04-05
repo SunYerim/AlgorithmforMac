@@ -11,6 +11,7 @@ public class Main {
     static int N, total = 0;
     static List<List<Integer>> graph;
     static boolean[] visited;
+    static int[] depth;
 
     public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -33,28 +34,54 @@ public class Main {
         }
 
         visited = new boolean[N + 1];
-        dfs(1, 0);
+        depth = new int[N + 1];
+        bfs(1);
+//        dfs(1, 0);
+
+        for (int i = 2; i <= N; i++) {
+            if (graph.get(i).size() == 1) {
+                total += depth[i];
+            }
+        }
 
         System.out.println(total % 2 == 0 ? "No" : "Yes");
 
     }
 
-    public static void dfs(int node, int depth) {
-        visited[node] = true;
-        boolean isLeaf = true;
+    private static void bfs(int root) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(root);
+        visited[root] = true;
 
-        for (int next : graph.get(node)) {
-            if (!visited[next]) {
-                isLeaf = false;
-                dfs(next, depth + 1);
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+
+            for (int next : graph.get(cur)) {
+                if (!visited[next]) {
+                    queue.add(next);
+                    visited[next] = true;
+                    depth[next] = depth[cur] + 1;
+                }
             }
         }
-
-        if (isLeaf) {
-//            System.out.println(node + " " + depth);
-            total += depth;
-        }
     }
+
+//    public static void dfs(int node, int depth) {
+//        visited[node] = true;
+//        boolean isLeaf = true;
+//
+//        for (int next : graph.get(node)) {
+//            if (!visited[next]) {
+//                isLeaf = false;
+//                dfs(next, depth + 1);
+//            }
+//        }
+//
+//        if (isLeaf) {
+////            System.out.println(node + " " + depth);
+//            total += depth;
+//        }
+//    }
 
 
 }

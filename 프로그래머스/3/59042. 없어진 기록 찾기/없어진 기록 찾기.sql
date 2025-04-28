@@ -1,0 +1,2 @@
+-- 코드를 입력하세요
+select ao.animal_id as ANIMAL_ID, ao.name AS NAME from animal_outs ao left outer join animal_ins ai on ai.animal_id = ao.animal_id where ao.animal_id is not null and ai.animal_id is null order by animal_id, name;

@@ -1,0 +1,2 @@
+-- 코드를 입력하세요
+SELECT ai.name as NAME, ai.datetime as DATETIME from animal_ins ai left outer join animal_outs ao on ai.animal_id = ao.animal_id where ai.name is not null and ao.name is null order by DATETIME limit 3;

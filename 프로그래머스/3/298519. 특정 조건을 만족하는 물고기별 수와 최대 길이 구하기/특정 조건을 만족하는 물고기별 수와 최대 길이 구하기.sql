@@ -1,0 +1,13 @@
+-- 코드를 작성해주세요
+SELECT
+    count(*) as FISH_COUNT,
+    max(COALESCE(LENGTH, 10)) as MAX_LENGTH,
+    FISH_TYPE
+FROM
+    FISH_INFO
+GROUP BY
+    FISH_TYPE
+HAVING
+    AVG(COALESCE(LENGTH, 10)) >= 33
+ORDER BY
+    FISH_TYPE asc;

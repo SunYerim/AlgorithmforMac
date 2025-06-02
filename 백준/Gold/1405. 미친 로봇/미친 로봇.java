@@ -27,11 +27,8 @@ public class Main {
 
         dfs(0, 14, 14, 1.0);
 
-        System.out.println(
-            (result == (long) result)
-                ? String.format("%.1f", result)
-                : String.format("%.20f", result).replaceAll("0+$", "").replaceAll("\\.$", "")
-        );
+        System.out.println(BigDecimal.valueOf(result).toPlainString());
+
 
     }
 

@@ -1,0 +1,14 @@
+-- 코드를 작성해주세요
+SELECT DISTINCT
+    D.ID,
+    D.EMAIL,
+    D.FIRST_NAME,
+    D.LAST_NAME
+FROM
+    DEVELOPERS D
+JOIN
+    SKILLCODES S
+ON
+    S.CATEGORY = 'Front End' AND (D.SKILL_CODE & S.CODE > 0)
+ORDER BY
+    D.ID ASC;

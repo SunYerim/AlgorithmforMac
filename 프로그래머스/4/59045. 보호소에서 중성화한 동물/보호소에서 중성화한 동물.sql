@@ -1,2 +1,13 @@
 -- 코드를 입력하세요
-SELECT ai.animal_id as ANIMAL_ID, ai.animal_type as ANIMAL_TYPE, ai.name as NAME from animal_ins ai left outer join animal_outs ao on ai.animal_id = ao.animal_id where (ai.sex_upon_intake = 'Intact Female' and ao.sex_upon_outcome = 'Spayed Female') or (ai.sex_upon_intake = 'Intact Male' and ao.sex_upon_outcome = 'Neutered Male')order by ai.animal_id;
+SELECT
+    I.ANIMAL_ID,
+    I.ANIMAL_TYPE,
+    I.NAME
+FROM
+    ANIMAL_INS AS I
+LEFT JOIN
+    ANIMAL_OUTS AS O
+ON
+    I.ANIMAL_ID = O.ANIMAL_ID
+WHERE
+    (I.SEX_UPON_INTAKE = 'Intact Male' AND O.SEX_UPON_OUTCOME = 'Neutered Male') OR (I.SEX_UPON_INTAKE = 'Intact Female' AND O.SEX_UPON_OUTCOME = 'Spayed Female')

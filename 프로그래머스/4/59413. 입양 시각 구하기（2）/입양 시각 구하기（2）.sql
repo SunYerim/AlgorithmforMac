@@ -1,10 +1,18 @@
--- 코드를 입력하세요
-WITH RECURSIVE hours AS (
-    SELECT 0 AS hour
+WITH RECURSIVE TIME AS (
+    SELECT 0 AS HOUR
     UNION ALL
-    SELECT hour + 1
-    FROM hours
-    WHERE hour < 23
+    SELECT HOUR + 1 FROM TIME WHERE HOUR < 23
 )
-
-SELECT h.hour as HOUR, count(a.datetime) as COUNT from hours h left join animal_outs a ON HOUR(a.DATETIME) = h.hour group by h.hour order by h.hour;
+SELECT
+    T.HOUR,
+    COUNT(A.ANIMAL_ID) AS COUNT
+FROM
+    TIME T
+LEFT JOIN
+    ANIMAL_OUTS A
+ON
+    T.HOUR = HOUR(A.DATETIME)
+GROUP BY
+    T.HOUR
+ORDER BY
+    T.HOUR;

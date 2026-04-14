@@ -1,53 +1,61 @@
 import java.util.*;
 
 class Solution {
-    static PriorityQueue<Disk> pq;
     public int solution(int[][] jobs) {
-        int totalTime = 0; // 총 대기시간
-        int currTime = 0; // 현재시간
-        int completedJobs = 0; // 완료된 작업 개수
-        int jobIdx = 0; // jobs 배열 인덱스
-        pq = new PriorityQueue<>();
+        List<Disk> jobList = new ArrayList<>();
+        for (int i = 0; i < jobs.length; i++) {
+            jobList.add(new Disk(i, jobs[i][0], jobs[i][1]));
+        }
+        jobList.sort((a, b) -> a.requestTime - b.requestTime);
         
-        Arrays.sort(jobs, (a, b) -> a[0] - b[0]);
+        PriorityQueue<Disk> pq = new PriorityQueue<>();
+        int currTime = 0;
+        int completedJobs = 0;
+        int jobIdx = 0;
+        int totalTurnaroundTime = 0;
         
         while (completedJobs < jobs.length) {
-            // 현재 시간보다 작은 요청 시간을 가진 작업들을 순차적으로 pq에 추가
-            while (jobIdx < jobs.length && jobs[jobIdx][0] <= currTime) {
-                pq.add(new Disk(jobIdx, jobs[jobIdx][0], jobs[jobIdx][1]));
-                jobIdx++;
+            // 도착한 것들 넣기
+            while (jobIdx < jobs.length && jobList.get(jobIdx).requestTime <= currTime) {
+                pq.offer(jobList.get(jobIdx++));
             }
             
-            // 대기큐가 비어있으면
+            // 비어있다면
             if (pq.isEmpty()) {
-                currTime = jobs[jobIdx][0];
+                currTime = jobList.get(jobIdx).requestTime;
             } else {
                 Disk curr = pq.poll();
-                currTime += curr.time;
-                totalTime += (currTime - curr.request);
+                totalTurnaroundTime += (currTime + curr.duration - curr.requestTime);
+                currTime += curr.duration;
                 completedJobs++;
             }
         }
         
-        return totalTime / jobs.length;
+        return totalTurnaroundTime / jobs.length;
+        
     }
     
-    static class Disk implements Comparable<Disk>{
-        int number, request, time;
-        public Disk(int number, int request, int time) {
-            this.number = number;
-            this.request = request;
-            this.time = time;
+    static class Disk implements Comparable<Disk> {
+        int id;
+        int requestTime;
+        int duration;
+        
+        public Disk(int id, int requestTime, int duration) {
+            this.id = id;
+            this.requestTime = requestTime;
+            this.duration = duration;
         }
+        
         @Override
-        public int compareTo (Disk o) {
-            if (this.time == o.time) {
-                if (this.request == o.request) {
-                    return this.number - o.number;
-                }
-                return this.request - o.request;
-            }
-            return this.time - o.time;
+        public int compareTo(Disk o) {
+            if (this.duration != o.duration) {
+                return this.duration - o.duration;
+            } // 소요시간
+            if (this.requestTime != o.requestTime) {
+                return this.requestTime - o.requestTime;
+            } // 요청시각
+            return this.id - o.id; // 작업 번호
         }
+        
     }
 }
